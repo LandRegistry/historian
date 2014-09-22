@@ -23,8 +23,7 @@ class S3Store(object):
         obj.set_contents_from_string(json.dumps(data))
 
     def get(self, key, version=None):
-        obj = Key(self.bucket)
-        obj.key = key
+        obj = self.bucket.get_key(key, version_id=version)
         try:
             return obj.get_contents_as_string()
         except:

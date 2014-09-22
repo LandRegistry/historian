@@ -3,6 +3,7 @@ from flask import jsonify,  abort, request, make_response
 from application import app
 from .storage import S3Store
 import json
+import os
 
 storage = S3Store()
 
@@ -15,13 +16,17 @@ def get(key):
     version = request.args.get('version')
     if version == 'list':
         lst = storage.list_versions(key)
-        for x in lst:
-            print "ITEM:::", x, type(x)
-        #return jsonify({'versions': lst})
-        return 'OK'
+        return jsonify({'versions': [  _ver(key, ver) for ver in lst]})
     else:
         return get_for_version(key, version)
 
+def _ver(key, ver):
+    link = os.environ['HOST'] + key + "?version=" + ver.version_id
+    return {
+        'version_id': ver.version_id,
+        'last_modified':ver.last_modified,
+        "http://schema.org/url": { "@id": link }
+    }
 
 def get_for_version(key, version):
     value = storage.get(key, version)
