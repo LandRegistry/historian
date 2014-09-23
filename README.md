@@ -19,9 +19,9 @@ Configure
 
 Configure
 
-    export AWS_KEY=YOUR_KEY
+    export AWS_ACCESS_KEY_ID=YOUR_KEY
     export S3_BUCKET='some-bucket-name'
-    export AWS_SECRET=YOUR_AWS_SECRET
+    export AWS_SECRET_ACCESS_KEY=YOUR_AWS_SECRET
 
 If the bucket doesn't exist, ensure the ```AWS``` credential has permissions to create it. If you create it beforehand, ensure the bucket has versioning support.
 
