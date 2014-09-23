@@ -22,11 +22,17 @@ class S3Store(object):
 
         # get the previous version, if any
         previous = self.get(key, None)
-        if previous:
-            obj.metadata = {'previous_version_id': previous.version_id}
 
+        if previous:
+            obj.set_metadata('previous_version_id', previous.version_id)
+
+        # persist the new object
         obj.key = key
         obj.set_contents_from_string(json.dumps(data))
+
+        # do not attempt to set 'previous'' metadata to have a pointer
+        # to 'next', because versioned objects' metadata cannot
+        # be modified.
 
     def get(self, key, version=None):
         return self.bucket.get_key(key, version_id=version)

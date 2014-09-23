@@ -31,12 +31,12 @@ class Meta(object):
         }
         self.meta.update(VersionedLink(key.name, key.version_id).as_dict())
 
-        # meta data currently only carries 'previous version' information
         if key.metadata:
-            previous_version_id = key.metadata['previous_version_id']
-            previous = {'version_id': previous_version_id}
-            previous.update(VersionedLink(key.name, previous_version_id).as_dict())
-            self.meta.update({'previous': previous})
+            previous_version_id = key.get_metadata('previous_version_id')
+            if previous_version_id:
+                previous = {'version_id': previous_version_id}
+                previous.update(VersionedLink(key.name, previous_version_id).as_dict())
+                self.meta.update({'previous': previous})
 
     def as_dict(self):
         return self.meta
