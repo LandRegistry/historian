@@ -30,9 +30,16 @@ class S3Store(object):
         obj.key = key
         obj.set_contents_from_string(json.dumps(data))
 
-        # do not attempt to set 'previous'' metadata to have a pointer
-        # to 'next', because versioned objects' metadata cannot
-        # be modified.
+        # Do not:
+        # - attempt to set 'previous'' metadata to have a pointer
+        #   to 'next', because versioned objects' metadata cannot
+        #   be modified.
+        # - make a copy of 'previous' via 'set_remote_metadata' and
+        #   expect to be able to just delete old 'previous' and
+        #   setting 'current''s previous_version_id to the new
+        #   previous' version_id, because at this point 'current'
+        #   will be un-modifiable. Chicken/egg, in a nutshell.
+
 
     def get(self, key, version=None):
         return self.bucket.get_key(key, version_id=version)
