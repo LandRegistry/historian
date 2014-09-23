@@ -2,3 +2,9 @@
 *.pyc
 static/build
 static/.webassets-cache
+
+#intellij
+*.iml
+*.idea
+
+
