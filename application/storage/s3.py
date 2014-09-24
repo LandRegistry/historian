@@ -47,24 +47,4 @@ class S3Store(object):
     def list_versions(self, key):
         return self.bucket.list_versions(prefix=key)
 
-class pgStore(object):
 
-    #todo
-    #Everything below copied from in memory store referred to in Juans Slack message.  Apply to PG.
-    def __init__(self):
-        self.store = {}
-
-    def get_last(self):
-        return self.store.get('head.json')
-
-    def put_last(self, data):
-        key =  '%s-%s.json ' % (data['title_number'], data['created_ts'])
-        latest_title =  'head.json'
-        self.store[key] = data
-        self.store[latest_title] = data
-
-    def list_titles(self):
-        return [{k.split( '/ ')[0] : v} for k,v in self.store.iteritems() if 'head' in k]
-
-    def clear(self):
-        self.store.clear()
