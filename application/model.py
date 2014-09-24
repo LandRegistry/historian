@@ -1,5 +1,6 @@
 import json
 import os
+from application import db
 
 class Contents(object):
     """The contents of the thing being stored."""
@@ -48,3 +49,17 @@ class VersionedLink(object):
 
     def as_dict(self):
         return {"http://schema.org/url": {"@id": self.link}}
+
+
+class Historical(db.Model):
+
+    __tablename__ = 'historical'
+
+    key = db.Column(db.String(), nullable=False, primary_key=True)
+    value = db.Column(db.String(), nullable=False)
+    # metadata -> version, previous version, and a timestamp
+    # that timestamp is the historian timestamp, not the system-of-record one
+    version = db.Column(db.String(), nullable=False)
+
+
+

@@ -1,6 +1,8 @@
 import json
 from .model import Contents, Meta
+from application import app
 from .storage import S3Store
+from .storage import pgStore
 
 
 class Service(object):
@@ -10,7 +12,10 @@ class Service(object):
     """
 
     def __init__(self):
-        self.storage = S3Store()
+        # if app.config['STORAGE'] == 'S3':
+        #     self.storage = S3Store()
+        # else:
+        self.storage = pgStore
 
     def post(self, key, data):
         self.storage.post(key, data)
