@@ -57,8 +57,6 @@ class Historical(db.Model):
 
     key = db.Column(db.String(), nullable=False, primary_key=True)
     value = db.Column(db.String(), nullable=False)
-    # metadata -> version, previous version, and a timestamp
-    # that timestamp is the historian timestamp, not the system-of-record one
     version = db.Column(db.String(), nullable=False)
 
 

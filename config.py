@@ -5,7 +5,6 @@ class Config(object):
     STORAGE = os.environ.get('STORAGE')
     BASIC_AUTH_USERNAME = os.environ.get('BASIC_AUTH_USERNAME')
     BASIC_AUTH_PASSWORD = os.environ.get('BASIC_AUTH_PASSWORD')
-    STORAGE = os.environ.get('pg')
     SQLALCHEMY_DATABASE_URI = os.environ.get('DATABASE_URL')
 
 class DevelopmentConfig(Config):
