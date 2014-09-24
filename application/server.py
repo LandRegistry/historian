@@ -1,4 +1,4 @@
-from flask import abort, request
+from flask import abort, jsonify, request
 
 from application import app
 from .service import Service
@@ -27,6 +27,6 @@ def post(key):
         abort(400)
     try:
         service.post(key, request.json)
-        return 'OK'
+        return jsonify(request.json)
     except:
         abort(400)

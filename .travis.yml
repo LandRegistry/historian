@@ -2,21 +2,21 @@ language: python
 python:
 - '2.7'
 install:
-    - pip install -r requirements.txt
-    - pip install -r requirements_test.txt
-    - pip install python-coveralls
+- pip install -r requirements.txt
+- pip install -r requirements_test.txt
+- pip install python-coveralls
 env:
 - SETTINGS='config.TestConfig'
-script: 
+script:
 - source ./environment.sh
 - source ./environment_test.sh
 - py.test --cov application tests/ --cov-report=term --cov-report=html
 after_success:
-  - coveralls
+- coveralls
 deploy:
   provider: heroku
   api_key:
-    secure: VsLeTg541KCK5z33b4BkYEJvH/BswVZMutdy5bEuQI1UZTkx2VYCMDydT5OdaVbzjPSi8XKeu1KQhen0iQtGB4/P+YXgNElQKbwXovyQ+9HEa+L63mQIiiM0uREodSdF+UVSIuE8t6ssF4/mZnjw4i5l01EXI/4N6kzktAwEPfc=
+    secure: FljqdPYz/Ry5CLo43Os650rYH6La9JLzYSHqpA2YQOCcbfyCuper5nBq88tZ0xG1jXEBwy94AroVMD6WV7ApPdMs0FSqWaJB3bh0TTdYILhrEoj3WXyXB6ku/KSUWKQyPsUkd318IUDW0UC+P9g1qJBnjzM2oh5EEUL/DU9cRvQ=
   app: lr-historian
   on:
     repo: LandRegistry/historian
