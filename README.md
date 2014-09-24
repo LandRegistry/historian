@@ -33,9 +33,9 @@ If the bucket doesn't exist, ensure the ```AWS``` credential has permissions to 
 
 ### Create
 
-    curl -X POST \
-      -H "Content-Type: application/json" \
-      http://localhost:8000/a/b/c/123 \
+    curl -X POST
+      -H "Content-Type: application/json"
+      http://localhost:8015/a/b/c/123
       -d '{"foo": "bar", "other": "stuff",  "answer": 42 }'
 
 ....and again
