@@ -3,7 +3,7 @@
 static/build
 static/.webassets-cache
 
-#intellij
+# intellij file
 *.iml
 *.idea
 
