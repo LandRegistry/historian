@@ -1,4 +1,5 @@
 from application.model import Historical
+from memory import S3Shaped
 from application import db
 from application import app
 import json
@@ -6,10 +7,19 @@ import json
 
 class DatabaseStorage(object):
 
-    # TODO
-    # talk to database
     def get(self, key, version=None):
-        pass
+        query = db.session.query(Historical).filter(Historical.version == version, Historical.key == key).first()
+        if query:
+            app.logger.debug(query.value)
+            return S3Shaped(query.key, query.value)
+        else:
+            app.logger.debug('version not found')
+            empty_result = Historical()
+            empty_result.key = None
+            empty_result.value = None
+            empty_result.version = None
+            return S3Shaped(empty_result.key, empty_result.value)
+
 
     def post(self, key, data):
         app.logger.debug('database storing ' + json.dumps(data))
@@ -26,9 +36,8 @@ class DatabaseStorage(object):
             app.logger.error(e.message)
 
 
-
-
-
-
     def list_versions(self, key):
         pass
+
+
+

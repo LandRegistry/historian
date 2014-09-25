@@ -1,3 +1,4 @@
+from application import app
 class Storage(object):
 
     def __init__(self):
