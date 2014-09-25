@@ -41,9 +41,9 @@ If the bucket doesn't exist, ensure the ```AWS``` credential has permissions to 
 ....and again
 
 
-    curl -X POST \
-      -H "Content-Type: application/json" \
-      http://localhost:8000/a/b/c/123 \
+    curl -X POST
+      -H "Content-Type: application/json"
+      http://localhost:8015/a/b/c/123
       -d '{"foo": "barium", "other": "stuffing",  "answer": 43 }'
 
 
@@ -54,22 +54,22 @@ The storage will map the path ```a/b/c/123``` to a resource:
 ### Read
 
 
-    curl -H "Accept: application/json" \
-      http://localhost:8000/a/b/c/123
+    curl -H "Accept: application/json"
+      http://localhost:8015/a/b/c/123
 
 ...which will return the original (and latest version of the) content, as well as meta-data about the resource.
 
 ### Versions
 
-    curl -H "Accept: application/json" \
-      http://localhost:8000/a/b/c/123?versions=list
+    curl -H "Accept: application/json"
+      http://localhost:8015/a/b/c/123?versions=list
 
 ...which will return an array of meta-data about the resource.
 
 ### Specific version
 
-    curl -H "Accept: application/json" \
-      http://localhost:8000/a/b/c/123?version=a-specific-version
+    curl -H "Accept: application/json"
+      http://localhost:8015/a/b/c/123?version=a-specific-version
 
 ...which will return the specific version of the content, as well as meta-data about the resource.
 
