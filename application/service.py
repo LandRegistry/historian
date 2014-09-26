@@ -12,14 +12,11 @@ class Service(object):
     def __init__(self):
         if app.config['STORAGE'] == 's3':
             from storage.s3 import Storage
-            self.storage = Storage()
         elif app.config['STORAGE'] == 'db':
-            app.logger.debug('Storage method of database')
-            from storage.db import DatabaseStorage
-            self.storage = DatabaseStorage()
+            from storage.db import Storage
         else:
             from storage.memory import Storage
-            self.storage = Storage()
+        self.storage = Storage()
         print "Storage is", self.storage.__class__
 
     def post(self, key, data):
@@ -39,3 +36,5 @@ class Service(object):
                 print "Error", e
                 return None
 
+    def health(self):
+        return self.storage.health() 
