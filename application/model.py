@@ -1,6 +1,7 @@
 import json
 import os
 from application import db
+from application import app
 
 class Contents(object):
     """The contents of the thing being stored."""
@@ -13,10 +14,14 @@ class Contents(object):
         except:
             pass
 
-        self.value = {
-            'contents': contents,
-            'meta': Meta(obj).as_dict()
-        }
+        try:
+            meta_instance = Meta(obj)
+            self.value = {
+                'contents': contents,
+                'meta': meta_instance.as_dict()
+            }
+        except Exception as e:
+            app.logger.debug(e.message)
 
     def as_json(self):
         return json.dumps(self.value)
@@ -24,7 +29,6 @@ class Contents(object):
 
 class Meta(object):
     """Meta-data about the thing being stored."""
-
     def __init__(self, key):
         self.meta = {
             'version_id': key.version_id,
@@ -42,6 +46,8 @@ class Meta(object):
     def as_dict(self):
         return self.meta
 
+
+
 class VersionedLink(object):
 
     def __init__(self, name, version_id):
@@ -57,9 +63,5 @@ class Historical(db.Model):
 
     key = db.Column(db.String(), nullable=False, primary_key=True)
     value = db.Column(db.String(), nullable=False)
-    # metadata -> version, previous version, and a timestamp
-    # that timestamp is the historian timestamp, not the system-of-record one
-    version = db.Column(db.String(), nullable=False)
-
-
+    version = db.Column(db.String(), nullable=False, primary_key=True)
 

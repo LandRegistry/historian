@@ -14,8 +14,9 @@ class Service(object):
             from storage.s3 import Storage
             self.storage = Storage()
         elif app.config['STORAGE'] == 'db':
-            from storage.db import Storage
-            self.storage = Storage()
+            app.logger.debug('Storage method of database')
+            from storage.db import DatabaseStorage
+            self.storage = DatabaseStorage()
         else:
             from storage.memory import Storage
             self.storage = Storage()
