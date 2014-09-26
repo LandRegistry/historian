@@ -17,4 +17,4 @@ Flask-Migrate==1.2.0
 Flask-SQLAlchemy==1.0
 SQLAlchemy==0.9.6
 psycopg2==2.5.3
-
+-e git+https://github.com/Runscope/healthcheck.git@9d661a916f3ab630ae21e014758aa2f21fd40097#egg=healthcheck

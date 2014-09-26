@@ -1,9 +1,12 @@
 from flask import abort, jsonify, request
 
 from application import app
+
 from .service import Service
+from .health import Health
 
 service = Service()
+Health(app, checks=[service.health])
 
 
 @app.route('/', defaults={'key': ''})
