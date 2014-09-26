@@ -44,4 +44,6 @@ class DatabaseStorage(object):
     def get_version_number(self, key):
         query = db.session.query(Historical).filter(Historical.key == key)
         app.logger.debug(query.count()) #todo use this to determine next version.
+        #todo, apply this function in the post
+        #todo, finish this list function
 
