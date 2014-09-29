@@ -1,8 +1,3 @@
-<<<<<<< HEAD
-
-=======
-from application import app
->>>>>>> df35ee7a655f954a9e5248bcd842118207b2570a
 class Storage(object):
 
     def __init__(self):
