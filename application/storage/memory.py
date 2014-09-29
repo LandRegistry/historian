@@ -16,6 +16,8 @@ class Storage(object):
     def list_versions(self, key):
         return []
         
+    def health(self):
+        return True, "in-memory-storage"
 
 class S3Shaped(object):
 

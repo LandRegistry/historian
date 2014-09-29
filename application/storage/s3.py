@@ -4,10 +4,11 @@ from boto.s3.key import Key
 import os
 
 
-class S3Store(object):
+class Storage(object):
 
     def __init__(self):
         connection = boto.connect_s3()
+        self.conn = connection
         bucket = connection.lookup(os.environ['S3_BUCKET'])
         if not bucket:
             # if the user does not have 'create' permissions, ensure to create
@@ -47,4 +48,9 @@ class S3Store(object):
     def list_versions(self, key):
         return self.bucket.list_versions(prefix=key)
 
-
+    def health(self):
+        try:
+            self.conn.head_bucket(os.environ['S3_BUCKET'])
+            return True, "s3"
+        except:
+            return False, "s3"

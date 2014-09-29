@@ -5,10 +5,12 @@ from application import app
 import json
 
 
-class DatabaseStorage(object):
+class Storage(object):
 
     def get(self, key, version=None):
-        query = db.session.query(Historical).filter(Historical.version == version, Historical.key == key).first()
+        query = db.session.query(Historical).filter(
+                Historical.version == version,
+                Historical.key == key).first()
         if query:
             app.logger.debug(query.value)
             return S3Shaped(query.key, query.value)
@@ -19,7 +21,6 @@ class DatabaseStorage(object):
             empty_result.value = None
             empty_result.version = None
             return S3Shaped(empty_result.key, empty_result.value)
-
 
     def post(self, key, data):
         app.logger.debug('database storing ' + json.dumps(data))
@@ -34,7 +35,6 @@ class DatabaseStorage(object):
         except Exception as e:
             app.logger.error(e.message)
 
-
     def list_versions(self, key):
         results_list = []
         all_key_versions = db.session.query(Historical).filter(Historical.key == key)
@@ -42,9 +42,20 @@ class DatabaseStorage(object):
             results_list.append(S3Shaped(historical_instance.key, historical_instance.value))
         return results_list
 
+    def count(self):
+        return Historical.query.count()
+
 
     def get_version_number(self, key):
         query = db.session.query(Historical).filter(Historical.key == key)
         next_version_number = query.count() + 1
         return next_version_number
+
+
+    def health(self):
+        try:
+            self.count()
+            return True, "DB"
+        except:
+            return False, "DB"
 
