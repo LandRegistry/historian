@@ -1,5 +1,5 @@
 from application.model import Historical
-from memory import S3Shaped
+from memory import S3ShapedVersioned
 from application import db
 from application import app
 import json
@@ -13,14 +13,14 @@ class Storage(object):
                 Historical.key == key).first()
         if query:
             app.logger.debug(query.value)
-            return S3Shaped(query.key, query.value)
+            return S3ShapedVersioned(query.key, query.value, query.version)
         else:
             app.logger.debug('version not found')
             empty_result = Historical()
             empty_result.key = None
             empty_result.value = None
             empty_result.version = None
-            return S3Shaped(empty_result.key, empty_result.value)
+            return S3ShapedVersioned(empty_result.key, empty_result.value, empty_result.version)
 
     def post(self, key, data):
         app.logger.debug('database storing ' + json.dumps(data))
@@ -39,9 +39,10 @@ class Storage(object):
         results_list = []
         all_key_versions = db.session.query(Historical).filter(Historical.key == key)
         for historical_instance in all_key_versions:
-            results_list.append(S3Shaped(historical_instance.key, historical_instance.value))
+            results_list.append(
+                S3ShapedVersioned(historical_instance.key, historical_instance.value, historical_instance.version))
         return results_list
-
+    
     def count(self):
         return Historical.query.count()
 
