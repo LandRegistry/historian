@@ -36,9 +36,11 @@ class DatabaseStorage(object):
 
 
     def list_versions(self, key):
-        self.get_version_number(key)
-        app.logger.debug(self.get_version_number(key))
-        pass
+        results_list = []
+        all_key_versions = db.session.query(Historical).filter(Historical.key == key)
+        for historical_instance in all_key_versions:
+            results_list.append(S3Shaped(historical_instance.key, historical_instance.value))
+        return results_list
 
 
     def get_version_number(self, key):
