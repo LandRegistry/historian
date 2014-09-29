@@ -8,3 +8,7 @@ static/.webassets-cache
 *.idea
 
 
+*.coverage
+*htmlcov
+
+

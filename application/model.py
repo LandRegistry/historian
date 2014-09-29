@@ -64,7 +64,5 @@ class Historical(db.Model):
 
     key = db.Column(db.String(), nullable=False, primary_key=True)
     value = db.Column(db.String(), nullable=False)
-    version = db.Column(db.String(), nullable=False)
-
-
+    version = db.Column(db.String(), nullable=False, primary_key=True)
 
