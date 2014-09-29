@@ -21,9 +21,10 @@ class Storage(object):
 
 class S3Shaped(object):
 
-    def __init__(self, key, data):
+    def __init__(self, key, data, version):
         self.key = key
         self.data = data
+        self.version = version
 
     def get_contents_as_string(self):
         return self.data
@@ -34,7 +35,7 @@ class S3Shaped(object):
 
     @property
     def version_id(self):
-        return "this-is-the-only-version"
+        return self.version
 
     @property
     def name(self):
@@ -44,14 +45,4 @@ class S3Shaped(object):
     def metadata(self):
         return {}
 
-class S3ShapedVersioned(S3Shaped):
-
-    def __init__(self, key, data, version):
-        self.key = key
-        self.data = data
-        self.version = version
-
-    @property
-    def version_id(self):
-        return self.version
 
