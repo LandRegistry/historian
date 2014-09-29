@@ -11,6 +11,7 @@ class Contents(object):
         # see if the content is JSON
         try:
             contents = json.loads(contents)
+            app.logger.debug(contents)
         except:
             pass
 

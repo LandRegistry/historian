@@ -2,7 +2,6 @@ from application.model import Historical
 from memory import S3Shaped
 from application import db
 from application import app
-from sqlalchemy import func
 import json
 
 
@@ -28,7 +27,7 @@ class DatabaseStorage(object):
             version_row = Historical()
             version_row.key = key
             version_row.value = json.dumps(data)
-            version_row.version = '2'
+            version_row.version = '1'
 
             db.session.add(version_row)
 
@@ -40,6 +39,7 @@ class DatabaseStorage(object):
     def list_versions(self, key):
         self.get_version_number(key)
         pass
+
 
     def get_version_number(self, key):
         query = db.session.query(Historical).filter(Historical.key == key)
