@@ -1,3 +1,4 @@
+export SETTINGS='config.TestConfig'
 export DATABASE_URL='sqlite://'
 export HOST='http://nowhere'
 export S3_BUCKET='land-registry-title-archive'
