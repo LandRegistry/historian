@@ -1,7 +1,9 @@
 import json
 import os
-from application import db
 from application import app
+
+# Classes to destructure 'S3Shaped' for rendering purposes.
+
 
 class Contents(object):
     """The contents of the thing being stored."""
@@ -30,23 +32,23 @@ class Contents(object):
 
 class Meta(object):
     """Meta-data about the thing being stored."""
-    def __init__(self, key):
+    def __init__(self, obj):
         self.meta = {
-            'version_id': key.version_id,
-            'last_modified': key.last_modified
+            'version_id': obj.version_id,
+            'last_modified': obj.last_modified
         }
-        self.meta.update(VersionedLink(key.name, key.version_id).as_dict())
+        self.meta.update(VersionedLink(obj.name, obj.version_id).as_dict())
 
-        if key.metadata:
-            previous_version_id = key.get_metadata('previous_version_id')
+        if obj.metadata:
+            previous_version_id = obj.get_metadata('previous_version_id')
             if previous_version_id:
                 previous = {'version_id': previous_version_id}
-                previous.update(VersionedLink(key.name, previous_version_id).as_dict())
+                previous.update(
+                        VersionedLink(obj.name, previous_version_id).as_dict())
                 self.meta.update({'previous': previous})
 
     def as_dict(self):
         return self.meta
-
 
 
 class VersionedLink(object):
@@ -56,13 +58,3 @@ class VersionedLink(object):
 
     def as_dict(self):
         return {"http://schema.org/url": {"@id": self.link}}
-
-
-class Historical(db.Model):
-
-    __tablename__ = 'historical'
-
-    key = db.Column(db.String(), nullable=False, primary_key=True)
-    value = db.Column(db.String(), nullable=False)
-    version = db.Column(db.String(), nullable=False, primary_key=True)
-

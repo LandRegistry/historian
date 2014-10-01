@@ -1,5 +1,5 @@
 import json
-from .model import Contents, Meta
+from application.model.render import Contents, Meta
 from application import app
 
 
@@ -17,7 +17,7 @@ class Service(object):
         else:
             from storage.memory import Storage
         self.storage = Storage()
-        print "Storage is", self.storage.__class__
+        app.logger.info("Storage is %s" % self.storage.__class__)
 
     def post(self, key, data):
         self.storage.post(key, data)
@@ -37,4 +37,4 @@ class Service(object):
                 return None
 
     def health(self):
-        return self.storage.health() 
+        return self.storage.health()

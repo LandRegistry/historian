@@ -1,6 +1,6 @@
-from application.model import Historical
+from application.model.db import Historical
 from sqlalchemy import desc
-from memory import S3Shaped
+from application.model.s3shaped import S3Shaped
 from application import db
 from application import app
 import json
@@ -9,26 +9,31 @@ import json
 class Storage(object):
 
     def get(self, key, version=None):
-
         if version:
-            query = db.session.query(Historical).filter(
+            result = db.session.query(Historical).filter(
                 Historical.version == version,
                 Historical.key == key).first()
         else:
-            query = db.session.query(Historical).filter(
+            # try and get latest version
+            result = db.session.query(Historical).filter(
                 Historical.key == key).order_by(desc(
                         Historical.version)).first()
 
-        if query:
-            app.logger.debug(query.value)
-            return S3Shaped(query.key, query.value, query.version)
+        if result:
+            metadata = {}
+
+            # get previous version of this result
+            previous = self.__get_previous_version_of(result)
+            if previous:
+                metadata['previous_version_id'] = previous.version
+
+            return S3Shaped(
+                   result.key,
+                   result.value,
+                   result.version,
+                   metadata)
         else:
-            app.logger.debug('version not found')
-            empty_result = Historical()
-            empty_result.key = None
-            empty_result.value = None
-            empty_result.version = None
-            return S3Shaped(empty_result.key, empty_result.value, empty_result.version)
+            return None
 
     def post(self, key, data):
         app.logger.debug('database storing ' + json.dumps(data))
@@ -36,8 +41,7 @@ class Storage(object):
             version_row = Historical()
             version_row.key = key
             version_row.value = json.dumps(data)
-            self.get_version_number(key)
-            version_row.version = self.get_version_number(key)
+            version_row.version = self.__get_version_number(key)
             db.session.add(version_row)
             db.session.commit()
         except Exception as e:
@@ -45,21 +49,34 @@ class Storage(object):
 
     def list_versions(self, key):
         results_list = []
-        all_key_versions = db.session.query(Historical).filter(Historical.key == key)
+        all_key_versions = db.session.query(
+                Historical).filter(
+                        Historical.key == key)
         for historical_instance in all_key_versions:
             results_list.append(
-                S3Shaped(historical_instance.key, historical_instance.value, historical_instance.version))
+                S3Shaped(
+                    historical_instance.key,
+                    historical_instance.value,
+                    historical_instance.version))
         return results_list
-    
+
     def count(self):
         return Historical.query.count()
 
-
-    def get_version_number(self, key):
+    def __get_version_number(self, key):
         query = db.session.query(Historical).filter(Historical.key == key)
         next_version_number = query.count() + 1
         return next_version_number
 
+    def __get_previous_version_of(self, obj):
+        """
+        Gets the predecessor of retrieved 'obj'
+        """
+        previous_version = int(obj.version) - 1
+        result = db.session.query(Historical).filter(
+                Historical.version == str(previous_version),
+                Historical.key == obj.key).first()
+        return result
 
     def health(self):
         try:
@@ -67,4 +84,3 @@ class Storage(object):
             return True, "DB"
         except:
             return False, "DB"
-

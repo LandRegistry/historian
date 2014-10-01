@@ -43,6 +43,7 @@ class Storage(object):
 
 
     def get(self, key, version=None):
+        # result below already 'S3Shaped' -- return as is
         return self.bucket.get_key(key, version_id=version)
 
     def list_versions(self, key):
