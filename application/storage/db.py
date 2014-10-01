@@ -1,4 +1,5 @@
 from application.model import Historical
+from sqlalchemy import desc
 from memory import S3Shaped
 from application import db
 from application import app
@@ -8,9 +9,16 @@ import json
 class Storage(object):
 
     def get(self, key, version=None):
-        query = db.session.query(Historical).filter(
+
+        if version:
+            query = db.session.query(Historical).filter(
                 Historical.version == version,
                 Historical.key == key).first()
+        else:
+            query = db.session.query(Historical).filter(
+                Historical.key == key).order_by(desc(
+                        Historical.version)).first()
+
         if query:
             app.logger.debug(query.value)
             return S3Shaped(query.key, query.value, query.version)
