@@ -45,7 +45,14 @@ If the bucket doesn't exist, ensure the ```AWS``` credential has permissions to 
       -H "Content-Type: application/json"
       http://localhost:8015/a/b/c/123
       -d '{"foo": "barium", "other": "stuffing",  "answer": 43 }'
+      
+....to post something that looks like a genuine register use:
+    curl -X POST 
+      -H "Content-Type: application/json"
+      http://localhost:8015/TEST1412258807231 
+      -d '{ "created_ts": 1412258807, "title_number": "TEST1412258807231", "json_structure_of_title"}
 
+    where "created_ts" is a unix timestamp, and "json_structure_of_title" is the same as returned from the search_api.
 
 The storage will map the path ```a/b/c/123``` to a resource:
 - S3: file 123 in path <bucket>/a/b/c
