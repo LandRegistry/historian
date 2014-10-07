@@ -24,7 +24,7 @@ def get(key):
 
 
 @app.route('/', defaults={'key': ''})
-@app.route('/<path:key>', methods=['POST'])
+@app.route('/<path:key>', methods=['POST', 'PUT'])
 def post(key):
     if not key:
         abort(400)
