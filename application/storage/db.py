@@ -4,6 +4,7 @@ from application.model.s3shaped import S3Shaped
 from application import db
 from application import app
 import json
+import time
 
 
 class Storage(object):
@@ -31,6 +32,7 @@ class Storage(object):
                    result.key,
                    result.value,
                    result.version,
+                   result.added,
                    metadata)
         else:
             return None
@@ -42,6 +44,7 @@ class Storage(object):
             version_row.key = key
             version_row.value = json.dumps(data)
             version_row.version = self.__get_version_number(key)
+            version_row.added = int(time.time())
             db.session.add(version_row)
             db.session.commit()
         except Exception as e:

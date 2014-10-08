@@ -8,11 +8,12 @@ class S3Shaped(object):
     for rendering.
     """
 
-    def __init__(self, key, data, version, _metadata=None):
+    def __init__(self, key, data, version, added, _metadata=None):
         self.key = key
         self.data = data
         self.version = version
         self._metadata = _metadata
+        self.added = added
 
     def get_contents_as_string(self):
         return self.data
@@ -22,7 +23,7 @@ class S3Shaped(object):
         if 'last_modified' in self.key:
             return self.key['last_modified']
         else:
-            return None
+            return self.added
 
     @property
     def version_id(self):
