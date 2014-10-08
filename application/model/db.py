@@ -12,7 +12,7 @@ class Historical(db.Model):
     key = db.Column(db.String(), nullable=False, primary_key=True)
     value = db.Column(db.String(), nullable=False)
     version = db.Column(db.String(), nullable=False, primary_key=True)
-    added = db.Column(db.String(), nullable=False)
+    added = db.Column(db.Integer(), nullable=False)
 
     def __repr__(self):
         d = {
