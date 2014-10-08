@@ -60,7 +60,8 @@ class Storage(object):
                 S3Shaped(
                     historical_instance.key,
                     historical_instance.value,
-                    historical_instance.version))
+                    historical_instance.version,
+                    historical_instance.added))
         return results_list
 
     def count(self):
