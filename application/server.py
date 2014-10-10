@@ -1,5 +1,5 @@
 from flask import abort, jsonify, request
-
+import json
 from application import app
 
 from .service import Service
@@ -20,7 +20,7 @@ def get(key):
         app.logger.warn('Object 404, key=%s, version=%s' % (key, version))
         abort(404)
     else:
-        return result
+        return jsonify(json.loads(result))
 
 
 @app.route('/', defaults={'key': ''})
