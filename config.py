@@ -14,3 +14,4 @@ class DevelopmentConfig(Config):
 
 class TestConfig(DevelopmentConfig):
     TESTING = True
+    STORAGE = os.environ['STORAGE']

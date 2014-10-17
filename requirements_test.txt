@@ -3,9 +3,9 @@ cov-core
 coverage
 mock
 py
-pytest
 pytest-cov
-python-coveralls
+pytest
+responses
 PyYAML
 sh
 six
