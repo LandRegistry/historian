@@ -8,8 +8,10 @@ app = Flask(__name__)
 
 app.config.from_object(os.environ.get('SETTINGS'))
 
-db = SQLAlchemy(app)
+from werkzeug.contrib.fixers import ProxyFix
+app.wsgi_app = ProxyFix(app.wsgi_app)
 
+db = SQLAlchemy(app)
 
 # auth
 if os.environ.get('BASIC_AUTH_USERNAME'):
